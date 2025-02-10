@@ -3,6 +3,6 @@
 * model 로드 부분이 불안정하여 'model 저장부터 로드'하는 과정까지 재구현 필요한 상태로 보류함.
 
 * 참고사항
-- predict_final -> model_train.py에서 학습된 모델을 이용하여 예측만 수행하는 코드 (Flask에 사용)
-- model_train.py -> BERT 임베딩 모델, CNN+RNN 하이브리드 신경망을 이용하여 모델 학습하는 코드 (참고용, Flask 적용 X)
-- best_model_bert.keras -> model_train.py에서 훈련된 모델을 추출한 파일 (모델)
+-- predict_final -> model_train.py에서 학습된 모델을 이용하여 예측만 수행하는 코드 (Flask에 사용)
+-- model_train.py -> BERT 임베딩 모델, CNN+RNN 하이브리드 신경망을 이용하여 모델 학습하는 코드 (참고용, Flask 적용 X)
+-- best_model_bert.keras -> model_train.py에서 훈련된 모델을 추출한 파일 (모델)
