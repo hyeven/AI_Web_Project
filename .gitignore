@@ -1,0 +1,6 @@
+myenv/ 
+flask_app/best_model_bert_savedmodel/ 
+myenv/Lib/site-packages/ 
+*.pyd 
+*.data-00000-of-00001 
+__pycache__/ 

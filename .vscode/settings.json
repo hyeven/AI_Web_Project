@@ -1,0 +1,9 @@
+{
+  "python.testing.unittestArgs": ["-v", "-s", "./flask_app", "-p", "test_*.py"],
+  "python.testing.pytestEnabled": false,
+  "python.testing.unittestEnabled": true,
+
+  // "python.defaultInterpreterPath": "C:/Users/annakim/anaconda3/envs/myenv/python.exe",
+  "terminal.integrated.cwd": "C:/Projects/web/flask_app",
+  "python.pythonPath": "C:\\Users\\annakim\\AppData\\Local\\Programs\\Python\\Python39\\python.exe"
+}

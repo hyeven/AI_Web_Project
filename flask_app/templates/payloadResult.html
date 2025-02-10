@@ -1,0 +1,324 @@
+<!-- 작업자: 박민정 -->
+<!DOCTYPE html>
+<html lang="ko">
+
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>404NotFound | 예측 결과</title>
+    <!-- Favicon 추가 -->
+    <link rel="icon" href="/static/img/404nf_fabicon.png" type="image/png"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.3.2/lux/bootstrap.min.css"/>
+    <!--스타일 영역-->
+    <style>
+      /*전체 영역*/
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: #f8f9fa;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      /* 컨텐츠 영역 */
+      .container {
+        margin-top: 50px;
+        margin-bottom: 50px;
+        background: #ffffff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        padding: 20px;
+      }
+
+      /*상단 네비게이션 패딩 비활성화 */
+      .navbar {
+        --bs-navbar-padding-x: unset;
+        height: 120px;
+      }
+
+      .nav-item {
+        font-size: 1.1rem;
+      }
+
+      /* 진행 단계 레이아웃 */
+      .step-container {
+        margin: 20px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .step {
+        text-align: center;
+        position: relative;
+        flex-shrink: 0;
+        margin: 0 10px;
+        display: flex;
+        align-items: center;
+
+      }
+
+      .step .step-number {
+        font-size: 18px;
+        font-weight: bold;
+        color: white;
+        background-color: #a9a9a9;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        display: inline-block;
+        z-index: 1;
+        margin-right: 10px;
+      }
+
+      .step.active .step-number {
+        background-color: #007fff;
+      }
+
+      .line {
+        -ms-flex: 1 0 32px;
+        flex: 1 0 32px;
+        min-width: 1px;
+        min-height: 1px;
+        margin: auto;
+        background-color: rgba(0, 0, 0, .12);
+      }
+
+      .step:last-child::after {
+        display: none;
+      }
+
+      .step-title {
+        font-size: 14px;
+        color: #6c757d;
+        font-weight: bold;
+      }
+
+      .step_active {
+        color: #007fff;
+      }
+
+      /*컨텐츠 박스*/
+      .result-box {
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 20px;
+        background-color: #ffffff;
+        margin-bottom: 20px;
+      }
+
+      .result-title {
+        font-size: 15px;
+        font-weight: bold;
+        margin-top: 30px;
+      }
+
+      /*정상,확률 배경 박스*/
+      .highlight {
+        font-weight: bold;
+        color: white;
+        background-color: #fc0b0b;
+        /* 초록색 (정상) */
+        padding: 2px 8px;
+        border-radius: 4px;
+      }
+
+      .confidence-box {
+        font-weight: bold;
+        color: white;
+        background-color: #343a40;
+        padding: 2px 8px;
+        border-radius: 4px;
+      }
+
+      /* 버튼 스타일 */
+      .button_next {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: #007fff;
+        border: 1px solid #007fff;
+        border-radius: 5px;
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+      }
+
+      .button_next:hover {
+        background-color: #007fff;
+        color: #ffffff;
+        transform: scale(1.05);
+      }
+
+      .button_next:active {
+        transform: scale(0.9931);
+      }
+
+      /* 푸터 */
+      .footer-bar {
+        background-color: #f8f9fa;
+        padding: 10px 0;
+        border-top: 1px solid #dee2e6;
+        text-align: center;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        margin-top: auto;
+      }
+
+      .footer {
+        color: #6c757d;
+        font-size: 14px;
+      }
+
+      .footer_name {
+        color: #007fff;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      .footer_name:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+
+  <!--HTML 구조 영역-->
+
+  <body>
+    <!-- 메뉴 부분 -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-4">
+      <a class="navbar-brand" href="/">
+        <img src="/static/img/404notfound_logo.png" alt="Logo" style="height: 115px; width: 110px;">
+      </a>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">My page</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/payloadInput">Payload 예측</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- 컨텐츠 부분 -->
+    <div class="container">
+      <!-- 단계 표시 -->
+      <div class="step-container">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-title">페이로드를 입력하세요.</div>
+        </div>
+        <div class="line"></div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-title">모델이 분석하는 중입니다.</div>
+        </div>
+        <div class="line"></div>
+        <div class="step active">
+          <div class="step-number">3</div>
+          <div class="step-title step_active">예측 결과</div>
+        </div>
+      </div>
+
+      <!-- 페이로드 출력 -->
+      <h3 class="result-title">입력한 페이로드</h3>
+      <div class="result-box">
+        <p id="payload-output"></p>
+      </div>
+
+      <!-- 모델 결과 출력 -->
+      <h3 class="result-title">분류형 모델 결과</h3>
+      <div class="result-box">
+        <ul>
+          <li>
+            AI 예측: 인공지능에서 예측한 결과는
+            <span id="ai-prediction" class="highlight"></span>일 확률이
+            <span id="prediction-confidence" class="confidence-box"></span>입니다.
+          </li>
+          <li>공격 유형:
+            <span id="attack-type"></span></li>
+          <li>분석 기법: 머신러닝 기반의 알고리즘</li>
+        </ul>
+      </div>
+      <!-- 메인으로 돌아가기 버튼 -->
+      <div class="text-end mt-3">
+        <a href="/payloadInput" class="button_next">메인으로 돌아가기</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- 푸터 -->
+  <div class="footer-bar">
+    <div class="footer">
+      Copyright © 2024
+      <span class="footer_name">404NotFound corp.</span>
+      ALL RIGHTS RESERVED.
+    </div>
+  </div>
+
+  <!--스크립트 영역-->>
+  <script>
+    window.onload = async function () {
+      const payload = localStorage.getItem("convertedPayload"); // 변환된 페이로드 가져오기
+      if (!payload) {
+        alert("페이로드가 없습니다. 입력 페이지로 이동합니다.");
+        window.location.href = "/payloadInput";
+        return;
+      }
+
+      console.log("전송할 페이로드:", payload);
+
+      try {
+        // 서버로 POST 요청 보내기
+        const response = await fetch("/predict", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({payload})
+        });
+
+        if (!response.ok) {
+          throw new Error("서버 응답 실패");
+        }
+
+        const predictionResult = await response.json();
+        console.log("예측 결과:", predictionResult);
+
+        // 예측 결과를 DOM에 반영
+        document
+          .getElementById("payload-output")
+          .innerText = predictionResult.payload;
+        document
+          .getElementById("ai-prediction")
+          .innerText = predictionResult.predicted_label;
+        document
+          .getElementById("prediction-confidence")
+          .innerText = `${predictionResult
+          .predicted_probability
+          .toFixed(2)}%`;
+        document
+          .getElementById("attack-type")
+          .innerText = predictionResult.predicted_label;
+
+      } catch (error) {
+        console.error("예측 결과를 가져오는 중 오류:", error);
+        alert("예측 결과를 가져오는 데 실패했습니다.");
+        // window.location.href = "/payloadInput";
+      }
+    };
+  </script>
+
+  <!-- Bootstrap Bundle (JS 포함) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>로그인 페이지</title>
+  <!-- Bootswatch Lux Theme -->
+  <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/lux/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* 화면 중앙 배치 */
+    body {
+      margin: 0;
+      overflow: hidden; /* 스크롤 제거 */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: radial-gradient(circle at center, #1a1a1a, #000000); /* 어두운 배경 */
+    }
+
+    /* canvas 설정 */
+    #backgroundCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1; /* canvas를 뒤로 배치 */
+    }
+
+    /* 카드 스타일 */
+    .card {
+      background: linear-gradient(145deg, #2e2e2e, #1c1c1c);
+      color: #d1d1d1;
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.5), 0 0 30px rgba(0, 255, 255, 0.3);
+      padding: 20px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+      z-index: 1;
+    }
+
+    .card img {
+        margin: 5px 5px ; 
+        /* 위쪽 5px, 아래쪽 10px으로 여백 조정 */
+    }
+
+    .card h1 {
+      color: #00ffff;
+      font-size: 2rem;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 20px;
+      text-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff;
+    }
+
+    .form-control {
+      background-color: rgba(50, 50, 50, 0.8);
+      color: #ffffff;
+      border: 1px solid #00ffff;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 15px;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+    }
+
+    .form-control:focus {
+      background-color: rgba(50, 50, 50, 1);
+      border-color: #00ffff;
+      color: #ffffff;
+      box-shadow: 0 0 15px #00ffff;
+    }
+
+    .info-text {
+      font-size: 0.9rem;
+      color: #00d8ff;
+      text-align: left;
+      margin-bottom: 15px;
+    }
+
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .checkbox-container input {
+      accent-color: #00ffff;
+      margin-right: 10px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, #00ffff, #007fff);
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #fff;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(90deg, #007fff, #00ffff);
+      box-shadow: 0 0 30px rgba(0, 255, 255, 1), 0 0 50px rgba(0, 255, 255, 0.7);
+      transform: scale(1.05);
+    }
+
+    .link-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .link-container a {
+      font-size: 0.85rem;
+      color: #00ffff;
+      text-decoration: none;
+      text-shadow: 0 0 10px #00ffff;
+    }
+
+    .link-container a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <!-- 애니메이션 배경 -->
+  <canvas id="backgroundCanvas"></canvas>
+
+  <!-- 로그인 박스 -->
+  <div class="card">
+    <img src="logo.png" alt="404 Not Found">
+    <form>
+      <input type="email" id="email" class="form-control mb-3" placeholder="이메일">
+      <input type="password" id="password" class="form-control mb-3" placeholder="비밀번호">
+      <p class="info-text">이메일과 비밀번호를 입력하고 로그인하세요.</p>
+      <div class="checkbox-container">
+        <input type="checkbox" id="remember">
+        <label for="remember">아이디 저장</label>
+      </div>
+      <button type="button" class="btn btn-primary w-100" onclick="showAlert()">로그인</button>
+    </form>
+    <div class="link-container">
+      <a href="register.html">회원가입</a>
+      <a href="forgot-password.html">비밀번호 재설정</a>
+    </div>
+  </div>
+
+  <script>
+    // Canvas 설정
+    const canvas = document.getElementById('backgroundCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const snowflakes = [];
+
+    class Snowflake {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1; // 눈 크기
+        this.speedY = Math.random() * 0.5 + 0.2; // 속도를 더 느리게 설정
+        this.speedX = Math.random() * 0.5 - 0.25; // 좌우 흔들림
+      }
+
+      update() {
+        this.y += this.speedY;
+        this.x += this.speedX;
+
+        if (this.y > canvas.height) {
+          this.y = 0;
+          this.x = Math.random() * canvas.width;
+        }
+      }
+
+      draw() {
+        ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.fill();
+      }
+    }
+
+    function initSnowflakes() {
+      for (let i = 0; i < 150; i++) {
+        snowflakes.push(new Snowflake());
+      }
+    }
+
+    function animateSnowflakes() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      snowflakes.forEach((flake) => {
+        flake.update();
+        flake.draw();
+      });
+      requestAnimationFrame(animateSnowflakes);
+    }
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      snowflakes.length = 0;
+      initSnowflakes();
+    });
+
+    initSnowflakes();
+    animateSnowflakes();
+
+// 로그인 버튼 클릭 시 알림 표시
+function showAlert() {
+        window.location.href = "/payloadInput"; // payloadInput.html로 이동
+      }
+    </script>
+</body>
+</html>
